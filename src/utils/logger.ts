@@ -1,18 +1,36 @@
 import pino from "pino";
+import { env, isProd } from "../config/env";
 
-const isProd = process.env.NODE_ENV === "production";
-
+/**
+ * Structured, redacted application logger.
+ *
+ * Security rationale:
+ * - `redact` ensures secrets/tokens/passwords are never written to logs,
+ *   even if a developer accidentally logs a full request/user object.
+ * - JSON structured output (rather than console.log strings) makes logs
+ *   machine-parseable for the admin log viewer and alerting rules later.
+ */
 export const logger = pino({
-  level: process.env.LOG_LEVEL || (isProd ? "info" : "debug"),
+  level: isProd ? "info" : "debug",
+  redact: {
+    paths: [
+      "req.headers.authorization",
+      "req.headers.cookie",
+      "*.password",
+      "*.passwordHash",
+      "*.mfaSecret",
+      "*.mfaSecretEncrypted",
+      "*.token",
+      "*.sessionToken",
+    ],
+    censor: "[REDACTED]",
+  },
   transport: isProd
     ? undefined
     : {
         target: "pino-pretty",
-        options: {
-          colorize: true,
-          translateTime: "HH:MM:ss",
-        },
+        options: { colorize: true, translateTime: "SYS:standard" },
       },
 });
 
-export default logger;
+void env; // config imported to guarantee env validation runs before logger is used
