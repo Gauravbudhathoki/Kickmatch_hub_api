@@ -36,9 +36,6 @@ const userSchema = new Schema<IUser>(
     role: { type: String, enum: ["player", "captain", "admin"], default: "player", required: true },
 
     mfaEnabled: { type: Boolean, default: false },
-    // select: false -> never returned by default queries; must opt in explicitly.
-    // This is a deliberate defense against accidental data exposure via
-    // Team/Profile responses that do `User.find()` without a projection.
     mfaSecretEncrypted: { type: String, select: false },
     mfaBackupCodesHashed: { type: [String], default: [], select: false },
 
@@ -55,6 +52,5 @@ const userSchema = new Schema<IUser>(
   },
   { timestamps: true }
 );
-
 
 export const User = model<IUser>("User", userSchema);
