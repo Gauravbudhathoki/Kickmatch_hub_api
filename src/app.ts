@@ -9,6 +9,8 @@ import { env } from "./config/env";
 import { logger } from "./utils/logger";
 import { healthRouter } from "./routes/health";
 import { authRouter } from "./routes/auth.routes";
+import { mfaRouter } from "./routes/mfa.routes";
+import { profileRouter } from "./routes/profile.routes";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler";
 
 export function createApp(): Application {
@@ -49,6 +51,8 @@ export function createApp(): Application {
   
   app.use("/api/health", healthRouter);
   app.use("/api/auth", authRouter);
+  app.use("/api/mfa", mfaRouter);
+  app.use("/api/profile", profileRouter);
 ;
 
  

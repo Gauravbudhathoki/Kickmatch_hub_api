@@ -1,4 +1,4 @@
-import { Schema, model, Document, Types } from "mongoose";
+import { Schema, model, models, Document, Types, Model } from "mongoose";
 
 export interface ISession extends Document {
   userId: Types.ObjectId;
@@ -22,4 +22,4 @@ const sessionSchema = new Schema<ISession>({
   revoked: { type: Boolean, default: false },
 });
 
-export const Session = model<ISession>("Session", sessionSchema);
+export const Session = (models.Session as Model<ISession>) || model<ISession>("Session", sessionSchema);

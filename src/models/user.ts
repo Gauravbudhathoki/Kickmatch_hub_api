@@ -1,4 +1,4 @@
-import { Schema, model, Document, Types } from "mongoose";
+import { Schema, model, models, Document, Types, Model } from "mongoose";
 
 export type UserRole = "player" | "captain" | "admin";
 
@@ -53,4 +53,4 @@ const userSchema = new Schema<IUser>(
   { timestamps: true }
 );
 
-export const User = model<IUser>("User", userSchema);
+export const User = (models.User as Model<IUser>) || model<IUser>("User", userSchema);

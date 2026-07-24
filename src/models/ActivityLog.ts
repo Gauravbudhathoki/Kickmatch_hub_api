@@ -1,4 +1,4 @@
-import { Schema, model, Document, Types } from "mongoose";
+import { Schema, model, models, Document, Types, Model } from "mongoose";
 
 export type LogSeverity = "info" | "warning" | "critical";
 
@@ -28,4 +28,4 @@ const activityLogSchema = new Schema<IActivityLog>({
 
 activityLogSchema.index({ userId: 1, createdAt: -1 });
 
-export const ActivityLog = model<IActivityLog>("ActivityLog", activityLogSchema);
+export const ActivityLog = (models.ActivityLog as Model<IActivityLog>) || model<IActivityLog>("ActivityLog", activityLogSchema);
