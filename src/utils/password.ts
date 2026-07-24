@@ -16,31 +16,18 @@ export interface PasswordPolicyResult {
   errors: string[];
 }
 
-
 export function validatePasswordPolicy(
   password: string,
   context?: { username?: string; email?: string }
 ): PasswordPolicyResult {
   const errors: string[] = [];
 
-  if (password.length < 12) {
-    errors.push("Password must be at least 12 characters long.");
-  }
-  if (password.length > 128) {
-    errors.push("Password must be no more than 128 characters long.");
-  }
-  if (!/[A-Z]/.test(password)) {
-    errors.push("Password must contain at least one uppercase letter.");
-  }
-  if (!/[a-z]/.test(password)) {
-    errors.push("Password must contain at least one lowercase letter.");
-  }
-  if (!/[0-9]/.test(password)) {
-    errors.push("Password must contain at least one digit.");
-  }
-  if (!/[^A-Za-z0-9]/.test(password)) {
-    errors.push("Password must contain at least one special character.");
-  }
+  if (password.length < 12) errors.push("Password must be at least 12 characters long.");
+  if (password.length > 128) errors.push("Password must be no more than 128 characters long.");
+  if (!/[A-Z]/.test(password)) errors.push("Password must contain at least one uppercase letter.");
+  if (!/[a-z]/.test(password)) errors.push("Password must contain at least one lowercase letter.");
+  if (!/[0-9]/.test(password)) errors.push("Password must contain at least one digit.");
+  if (!/[^A-Za-z0-9]/.test(password)) errors.push("Password must contain at least one special character.");
   if (COMMON_PASSWORDS.has(password.toLowerCase())) {
     errors.push("This password is too common. Please choose a different one.");
   }
@@ -66,13 +53,8 @@ export async function verifyPassword(password: string, hash: string): Promise<bo
   return bcrypt.compare(password, hash);
 }
 
-/**
- * Checks a candidate password against stored password history hashes to
- * prevent reuse of the last N passwords.
- */
 export async function isPasswordReused(candidate: string, previousHashes: string[]): Promise<boolean> {
   for (const hash of previousHashes) {
-    // eslint-disable-next-line no-await-in-loop
     if (await bcrypt.compare(candidate, hash)) {
       return true;
     }
