@@ -1,4 +1,4 @@
-import { User } from "../ models/ User";
+import { User } from "../models/User";
 import { AppError } from "../middleware/errorHandler";
 import { logger } from "../utils/logger";
 import { generateTotpEnrollment, verifyTotpCode, generateBackupCodes } from "../utils/mfa";

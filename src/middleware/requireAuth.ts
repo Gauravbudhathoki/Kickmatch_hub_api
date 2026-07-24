@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { User, UserRole } from "../ models/ User";
+import { User, UserRole } from "../models/User";
 import { findActiveSessionByToken, SESSION_COOKIE_NAME } from "../services/session.service";
 import { AppError } from "./errorHandler";
 import { asyncHandler } from "../utils/asyncHandler";
