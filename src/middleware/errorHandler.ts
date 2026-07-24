@@ -19,7 +19,6 @@ export function notFoundHandler(_req: Request, res: Response): void {
   res.status(404).json({ error: "Not found" });
 }
 
-
 export function errorHandler(err: unknown, req: Request, res: Response, _next: NextFunction): void {
   if (err instanceof ZodError) {
     logger.warn({ err: err.flatten(), path: req.path }, "Validation error");
