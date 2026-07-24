@@ -12,6 +12,7 @@ import { authRouter } from "./routes/auth.routes";
 import { mfaRouter } from "./routes/mfa.routes";
 import { profileRouter } from "./routes/profile.routes";
 import { teamRouter } from "./routes/team.routes";
+import { matchRouter } from "./routes/match.routes";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler";
 
 export function createApp(): Application {
@@ -55,6 +56,7 @@ export function createApp(): Application {
   app.use("/api/mfa", mfaRouter);
   app.use("/api/profile", profileRouter);
   app.use("/api/teams", teamRouter);
+  app.use("/api/matches", matchRouter);
 ;
 
  
