@@ -1,0 +1,31 @@
+import { createApp } from "./app";
+import { env } from "./config/env";
+import { connectDB, disconnectDB } from "./config/db";
+import { logger } from "./utils/logger";
+
+async function main(): Promise<void> {
+  await connectDB();
+
+  const app = createApp();
+
+  const server = app.listen(env.PORT, () => {
+    logger.info(`KickMatch Hub API listening on port ${env.PORT} [${env.NODE_ENV}]`);
+  });
+
+  const shutdown = async (signal: string): Promise<void> => {
+    logger.info(`${signal} received, shutting down gracefully...`);
+    server.close(async () => {
+      await disconnectDB();
+      logger.info("Shutdown complete");
+      process.exit(0);
+    });
+  };
+
+  process.on("SIGTERM", () => void shutdown("SIGTERM"));
+  process.on("SIGINT", () => void shutdown("SIGINT"));
+}
+
+main().catch((err) => {
+  logger.error({ err }, "Fatal startup error");
+  process.exit(1);
+});
